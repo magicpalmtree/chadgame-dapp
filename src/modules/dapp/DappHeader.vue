@@ -49,7 +49,9 @@
               <div class="py-6 px-5">
                 <div class="flex flex-col items-center">
                   <router-link v-for="item in navigation" :key="item.name" :to="item.href" :class="[item.current ? 'border-secondary text-secondary' : 'border-transparent text-gray-300 hover:border-gray-400 hover:text-gray-400', 'inline-flex items-center px-1 pt-1 border-b-2 text-xl font-medium']" :aria-current="item.current ? 'page' : undefined">
-                    {{ item.name }}
+                    <PopoverButton>
+                      {{ item.name }}
+                    </PopoverButton>
                   </router-link>
                 </div>
               </div>
@@ -79,9 +81,9 @@ export default {
     navigation() {
       return [
         { name: 'Dashboard', href: '/dapp', current: this.$route.name == 'Dashboard'},
-        { name: 'Total Pot', href: '#', current: this.$route.name == 'TotalPot' },//{ name: 'Total Pot', href: '/dapp/totalpot', current: this.$route.name == 'TotalPot' },
+        // { name: 'Total Pot', href: '#', current: this.$route.name == 'TotalPot' },//{ name: 'Total Pot', href: '/dapp/totalpot', current: this.$route.name == 'TotalPot' },
         { name: 'Previous Winners', href: '/dapp/winners', current: this.$route.name == 'Winners' },
-        { name: 'Buy New', href: '#', current: this.$route.name == 'BuyNew' },//{ name: 'Buy New', href: '/dapp/buynew', current: this.$route.name == 'BuyNew' },
+        // { name: 'Buy New', href: '#', current: this.$route.name == 'BuyNew' },//{ name: 'Buy New', href: '/dapp/buynew', current: this.$route.name == 'BuyNew' },
         { name: 'Website', href: '/', current: false },
       ];
     }

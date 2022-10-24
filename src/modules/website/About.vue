@@ -19,7 +19,7 @@
             </p>
             <div class="mt-10 sm:flex sm:justify-center lg:justify-start">
               <div class="">
-                <primary-button>
+                <primary-button visitUrl="https://app.uniswap.org/#/swap?chain=mainnet">
                   BUY TOKENS
                 </primary-button>
               </div>

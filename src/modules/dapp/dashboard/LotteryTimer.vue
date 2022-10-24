@@ -41,10 +41,17 @@
       <div class="text-center py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
         <div class="font-bold tracking-tight sm:tracking-tight mb-12">
           <span class="block mb-12 text-3xl text-secondary md:text-5xl sm:text-5xl">Current prize draw</span>
-          <span class="block text-7xl text-third">$<span class="text-7xl text-white">21,000</span></span>
+          <span class="block text-2xl md:text-7xl text-third">
+            <span class="text-2xl md:text-7xl text-white">
+              <count-on-change
+                :decimals="decimal"
+                :value="lotteryPrize"
+                suffix=""
+              />
+            </span> ETH</span>
         </div>
         <div class="mt-8 flex justify-center">
-          <primary-button>
+          <primary-button visitUrl="https://app.uniswap.org/#/swap?chain=mainnet">
             BUY $CHADGAME
           </primary-button>
         </div>
@@ -56,23 +63,37 @@
 
 <script>
 
+import { faTemperature1 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+
+import CountOnChange from "../../../components/CountOnChange.vue";
 import PrimaryButton from '../../../components/PrimaryButton.vue';
+import { connect } from '../../../utils/pusher';
 
 export default {
   name: "LotteryTimer",
   components: {
-    PrimaryButton
+    PrimaryButton, CountOnChange
   },
   async mounted() {
-    const result = await axios.get(import.meta.env.VITE_API_URL + '/getLotteryTimeLeft');
-    this.leftSecs = result.data.left;
-    this.terminated = result.data.terminated;
+    const resTime = await axios.get(import.meta.env.VITE_API_URL + '/time-left');
+    this.leftSecs = resTime.data.left;
+    this.terminated = resTime.data.terminated;
     this.loading = false;
+
+    const resPrize = await axios.get(import.meta.env.VITE_API_URL + '/lottery-prize');
+    this.lotteryPrize = parseFloat(resPrize.data.toFixed(10));
+    this.decimal = this.getDecimals(this.lotteryPrize);    
+    connect(import.meta.env.VITE_PUSHER_CHANNEL, 'prize-added', (data) => {
+      this.lotteryPrize = parseFloat(parseFloat(data.value).toFixed(10));
+      this.decimal = this.getDecimals(this.lotteryPrize);
+    });
   },
   data() {
     return {
       leftSecs: 0,
+      lotteryPrize: 0,
+      decimal: 10,
       loading: true,
       terminated: true
     }
@@ -109,6 +130,15 @@ export default {
         mins,
         secs
       }
+    }
+  },
+  methods: {
+    getDecimals(value) {
+      const strValue = value.toString();
+      const arr = strValue.split(['.']);
+      if(arr.length > 1)
+        return arr[1].length;
+      return 0;
     }
   }
 }

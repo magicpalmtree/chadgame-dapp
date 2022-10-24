@@ -61,9 +61,11 @@
               </div>
               <div class="py-6 px-5">
                 <div class="flex flex-col items-center">
-                  <router-link v-for="item in navigation" :key="item.name" :to="item.href" :class="[item.current ? 'border-secondary text-secondary' : 'border-transparent text-gray-300 hover:border-gray-400 hover:text-gray-400', 'inline-flex items-center px-1 pt-1 border-b-2 text-xl font-medium']" :aria-current="item.current ? 'page' : undefined">
-                    {{ item.name }}
-                  </router-link>
+                  <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'border-secondary text-secondary' : 'border-transparent text-gray-300 hover:border-gray-400 hover:text-gray-400', 'inline-flex items-center px-1 pt-1 border-b-2 text-xl font-medium']" :aria-current="item.current ? 'page' : undefined">
+                    <PopoverButton>
+                      {{ item.name }}
+                    </PopoverButton>
+                  </a>
                 </div>
                 <div class="flex mt-6 justify-center">
                   <div class="flex flex-row w-56 rounded-full text-xl bg-white px-6 py-1 font-bold text-secondary bg-white hover:cursor-pointer hover:text-secondary-light" @click="launchDapp">
@@ -94,7 +96,7 @@
             <p class="mt-3 text-lg text-white sm:text-xl md:mt-5 md:max-w-3xl">What if you could buy a ticket to a prize draw ONE time and be entered to win every day for life!? Well, now you can with Chadgame.</p>
             <div class="mt-10 sm:flex sm:justify-center lg:justify-start">
               <div class="">
-                <primary-button>
+                <primary-button visitUrl="https://app.uniswap.org/#/swap?chain=mainnet">
                   BUY TOKENS
                 </primary-button>
               </div>
@@ -111,9 +113,9 @@
         </div>
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
           <div class="flex flex-col md:flex-row lg:flex-row justify-center items-center space-y-12 md:space-y-0 lg:space-y-0 space-x-0 md:space-x-0 lg:space-x-8 h-auto md:h-24 lg:h-24 mb-12 md:mb-0 lg:mb-0">
-            <info-card btnText="Roadmap" backImg="/imgs/img_info_back_1.webp" />
-            <info-card btnText="Whitepaper" backImg="/imgs/img_info_back_2.webp" />
-            <info-card btnText="Buy tokens" backImg="/imgs/img_info_back_3.webp" />
+            <info-card btnText="Roadmap" backImg="/imgs/img_info_back_1.webp" visitUrl="#roadmap" />
+            <info-card btnText="Whitepaper" backImg="/imgs/img_info_back_2.webp" visitUrl="" />
+            <info-card btnText="Buy tokens" backImg="/imgs/img_info_back_3.webp" visitUrl="https://app.uniswap.org/#/swap?chain=mainnet" />
           </div>
         </div>
       </div>
@@ -148,10 +150,10 @@ export default {
     return {
       navigation: [
         { name: 'About', href: '#about' },
-        { name: 'How does it work', href: '#' },
-        { name: 'Tokenomics', href: '#' },
-        { name: 'How to buy', href: '#' },
-        { name: 'Roadmap', href: '#' },
+        { name: 'How does it work', href: '#dapp' },
+        { name: 'Tokenomics', href: '#tokenomics' },
+        { name: 'How to buy', href: '#howtobuy' },
+        { name: 'Roadmap', href: '#roadmap' },
       ]
     }
   },

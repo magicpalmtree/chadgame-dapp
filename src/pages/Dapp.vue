@@ -1,7 +1,7 @@
 <template>
   <page-loader>
-    <dapp-header />
-    <div class="dapp">
+    <div class="flex flex-col min-h-screen dapp">
+      <dapp-header />
       <router-view v-slot="{ Component }">
         <transition name="scale" mode="out-in">
           <component :is="Component" />

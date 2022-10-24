@@ -8,7 +8,7 @@
             <span class="block my-5 pr-5 text-3xl font-bold text-secondary md:text-5xl sm:text-5xl">Winners</span>
           </div>
           <div class="overflow-hidden my-8 rounded-3xl bg-primary-dark p-2 sm:p-12 mx-2">
-            <div v-if="loading" class="winner text-white">
+            <div v-if="loading" class="text-white">
               <font-awesome-icon icon="circle-notch" spin/>
             </div>
             <div v-else class="flow-root">
@@ -25,10 +25,10 @@
                       <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4 flex-wrap">
                         <div class="flex flex-wrap">
                           <p class="text-sm sm:text-xl text-white">
-                            <span class="text-sm sm:text-2xl font-bold text-secondary">{{ event.content }}</span> ETH to <a :href="event.href" class="font-medium text-white break-all">{{ event.target }}</a>
+                            <span class="text-sm sm:text-2xl font-bold text-secondary">{{ event.content }}</span> ETH to <a :href="event.href" target="_blank" class="font-medium text-white break-all">{{ event.target }}</a>
                           </p>
                         </div>
-                        <div class="text-right text-sm sm:text-xl whitespace-nowrap text-white">
+                        <div class="text-right text-sm sm:text-xl whitespace-nowrap text-secondary">
                           <time :datetime="event.datetime">{{ event.date }}</time>
                         </div>
                       </div>
@@ -47,34 +47,23 @@
 
 
 <script>
+import axios from 'axios';
 import { CheckIcon, ThumbUpIcon, UserIcon } from '@heroicons/vue/solid'
+import { connect } from '../../../utils/pusher';
 
 export default {
   name: "Winners",
   components: [CheckIcon, ThumbUpIcon, UserIcon],
+
   async mounted() {
-    const lotteryContract = this.$store.state.lotteryContract;
-    this.historyData = await lotteryContract.getPastEvents(
-      'WinnerPrized', 
-      {
-        fromBlock: 0,
-        toBlock: 'latest'
-      }
-    );
+    const resWinners = await axios.get(import.meta.env.VITE_API_URL + '/prev-winners');
+    this.historyData = resWinners.data;
     this.loading = false;
-    lotteryContract.events.WinnerPrized({
-      filter: {
-        value: [],
-      },
-    })
-      .on('data', (event) => {
-        this.historyData[this.historyData.length] = event;
-      })
-      .on('changed', (event) => {
-        console.log(event);
-      })
-      .on('error', console.error);
+    connect(import.meta.env.VITE_PUSHER_CHANNEL, 'winner-prized', (value) => {
+      this.historyData[this.historyData.length] = value;
+    });
   },
+
   computed: {
     history() {
       const web3 = this.$store.state.web3;
@@ -82,9 +71,9 @@ export default {
       return this.historyData.map((item, index) => {
         return {
           id: index,
-          content: web3.utils.fromWei(item?.returnValues?.ethReceived),
-          target: item?.returnValues?.winner,
-          href: '#',
+          content: item.ethReceived,
+          target: item.winner,
+          href: 'https://goerli.etherscan.io/tx/'+item.transHash,
           date: '',
           datetime: '',
           icon: CheckIcon,
@@ -101,9 +90,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .winner {
-    height: 50vh;
-  }
-</style>

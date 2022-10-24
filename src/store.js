@@ -37,14 +37,13 @@ const store = createStore({
   actions: {
     async loadWeb3({commit, dispatch}) {
       // logout when they change
-      const web3 = new Web3(`wss://${import.meta.env.VITE_NETWORK}.infura.io/ws/v3/${import.meta.env.VITE_INFURA_API_KEY}`);
+      const web3 = new Web3(import.meta.env.VITE_RPC_URL);
       
       await dispatch('getChadContract', web3);
       await dispatch('getLotteryContract', web3);
 
       commit('updateWeb3', web3);
       commit('setReady');
-      console.log('TIGER');
     },
 
     async getChadContract({

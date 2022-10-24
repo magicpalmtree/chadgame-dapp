@@ -44,7 +44,7 @@
           </div>
           <div class="sm:flex sm:justify-center lg:justify-start mb-12 lg:mb-24 mt-6 lg:mt-0">
             <div class="">
-              <primary-button>
+              <primary-button visitUrl="https://app.uniswap.org/#/swap?chain=mainnet">
                 BUY TOKENS
               </primary-button>
             </div>

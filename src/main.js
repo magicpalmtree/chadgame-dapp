@@ -6,6 +6,7 @@ import routes from "./routes";
 import Vue3Lottie from 'vue3-lottie'
 import { createPinia } from 'pinia'
 import Vue3Transitions from 'vue3-transitions'
+import Vue3Autocounter from 'vue3-autocounter';
 import store from './store';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -33,5 +34,6 @@ app.use(Vue3Transitions)
 app.use(Vue3Lottie);
 
 app.component('font-awesome-icon', FontAwesomeIcon)
+app.component('vue3-autocounter', Vue3Autocounter)
 
 app.mount('#app');
